@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width: 800px;
+            height: 300px;
+            background-color: bisque;
+            margin: auto;
+            position: relative;
+        }
+        #wallLeft{
+            width: 2px;
+            height: 100%;
+            background-color: black;
+            float: left;
+        }
+        #wallRight{
+            width: 2px;
+            height: 100%;
+            background-color: black;
+            float: right;
+        }
+        #ball{
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            border-radius: 50%;
+            float: left;
+            position: absolute;
+            top: 40%;
+        }
+    </style>
+    <script>
+        let x = 0; //ball의 x좌표
+        let flag = true; //공이 방향을 바꾸게 하기 위한 flag변수
+        let sw = false; //setInterval을 작동시키기 위한 flag변수
+        let step=5; //몇 걸음씩 움직일지를 결정하는 발걸음(보폭) 변수, 이 값이 양수이면 우측, 음수이면 좌측으로 움직입니다
+
+        function moveBall(){
+            let ball = document.getElementById("ball");
+            if(sw){ //자동일 때
+                /*
+                if (x >= 770){ // (wrapper 의 width) - (ball의 width)
+                    flag = false;
+                }
+                if (x <= 0){ //처음
+                    flag = true;
+                }
+                if (flag){ //참이면 오른쪽으로 이동
+                    x += 5;
+                }
+                else{ //거짓이면 왼쪽으로 이동
+                    x -= 5;
+                }
+                */
+               x += step; //결국 우측 이동인지, 좌측 이동인지는 이 보폭 변수인 step이 결정합니다   
+
+               if(x<=0 || x>=770){ //or 조건으로 if 문의 라인수를 줄여보았습니다
+                    flag=!flag;
+                    step = step * -1; //발걸음(보폭)의 부호를 바꿉니다  
+               }
+            }
+            
+            ball.style.left = x + "px";
+        }
+        
+        function manual(){ //함수 하나로 수동 자동 만들기가 힘드네요..
+            sw = true; //잠시 켰다 끄기, 수동버튼 함수
+            moveBall();
+            sw = false;
+        }
+
+        function init(){
+            setInterval("moveBall()", 10);
+        }
+    </script>
+</head>
+<body onLoad="init()">
+    <button onClick="sw = !sw;">자동</button>
+    <button onClick="manual();;">수동</button>
+    <div id="wrapper">
+        <div id="wallLeft"></div>
+        <div id="ball"></div>
+        <div id="wallRight"></div>
+    </div>
+</body>
+</html>
